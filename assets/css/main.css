@@ -21,7 +21,8 @@ h1 {
   margin-top: 0;
 }
 h2 {
-  margin-bottom: 10px;
+  margin-top: 25px;
+  margin-bottom: 5px;
 }
 table {
   width: 640px;
@@ -55,7 +56,7 @@ img.qr {
   padding-right: 30px;
 }
 .note {
-  margin-top: 5px;
+  margin-top: 0;
   font-size: 14pt;
   font-style: italic;
   color: #333;
