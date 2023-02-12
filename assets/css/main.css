@@ -57,6 +57,7 @@ img.qr {
 }
 .note {
   margin-top: 0;
+  padding-left: 45px;
   font-size: 14pt;
   font-style: italic;
   color: #333;
@@ -68,4 +69,21 @@ img.qr {
 .contact a {
   padding: 5px;
   text-decoration: none;
+}
+.about {
+  margin-top: 25px;
+}
+.about img {	
+  float: left;
+  padding: 5px 20px 0px 10px;
+}
+.about h1 {
+  padding-left: 12px;
+}
+.about p {
+  width: 640px;
+  padding-left: 12px;
+  text-align: justify;
+  font-size: 14pt;
+  line-height: 1.25;
 }
