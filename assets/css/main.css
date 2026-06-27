@@ -1,89 +1,316 @@
-body {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-}
-main {
-  display: flex;
-  width: 100%;
-  height: 90%;
-  justify-content: center;
-}
-footer {
-  display: flex;
-  width: 100%;
-  height: 10%;
-  align-items: flex-end;
-  justify-content: center;
-  color: #333;
-}
-h1 {
-  margin-top: 0;
-}
-h2 {
-  margin-top: 25px;
-  margin-bottom: 5px;
-}
-table {
-  width: 640px;
-  height: 510px;
-  margin-top: 25px;
-}
-img.photo {
-  width: 266px;
-}
-img.qr {
-  width: 225px;
-  padding-left: 60px;
-}
-.legacy {
-  color: #666;
-}
-.bright {
-  color: #ff6600;
-}
-.motto {
-  width: 320px;
-  font-size: 24pt;	  
-}
-.motto p {
-  margin-top: 5px;
-}
-.revital {
-  font-style: italic;
-  text-align: right;
-  padding-top: 20px;
-  padding-right: 30px;
-}
-.note {
-  margin-top: 0;
-  padding-left: 45px;
-  font-size: 14pt;
-  font-style: italic;
-  color: #333;
-}
-.contact {
-  font-size: 16pt;
-  padding-left: 45px
-}
-.contact a {
-  padding: 5px;
-  text-decoration: none;
-}
-.about {
-  margin-top: 25px;
-}
-.about img {	
-  float: left;
-  padding: 5px 20px 0px 10px;
-}
-.about h1 {
-  padding-left: 12px;
-}
-.about p {
-  width: 640px;
-  padding-left: 12px;
-  text-align: justify;
-  font-size: 14pt;
-  line-height: 1.25;
-}
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0c0b0a;          /* warm pre-dawn near-black */
+      --surface:   #16161a;
+      --screen:    #ece1c6;          /* warm boot-screen tone the QR sits on */
+
+      /* ── the arc: dusty legacy ─────────────────► vibrant life ── */
+      --dust:      #9c8a72;          /* LEFT · faded sepia, a century-old photo */
+      --dust-dim:  rgba(156,138,114,.30);
+      --orange:    #ff6a00;          /* the bright future, full warmth */
+      --orange-dim:rgba(255,106,0,.25);
+      --gold:      #ffb24d;          /* RIGHT · the vivid, alive highlight */
+      --gold-dim:  rgba(255,178,77,.30);
+      --value:     var(--gold);      /* VALUE · amber gold — one gold across the page */
+      --green:     #4fd07a;          /* "alive" status dot, used once */
+
+      --rule:      rgba(232,228,223,.07);  /* splitters: quiet, unaccented */
+
+      --text:      #e8e4df;
+      --muted:     #8a8a92;
+
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    html, body {
+      height: 100%;
+      background: linear-gradient(to bottom, #09090b 0%, #0b0a0a 38%, #160f0a 62%, #261710 84%, #341e10 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Page shell ── */
+    .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ── Sky: a living dawn behind everything ── */
+    .sky { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .sky::before {                          /* faint circuitry grid, emerging only near the dawn */
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(to right,  rgba(255,170,95,.045) 0 1px, transparent 1px 66px),
+        repeating-linear-gradient(to bottom, rgba(255,170,95,.03)  0 1px, transparent 1px 66px);
+      -webkit-mask-image: radial-gradient(120% 95% at 55% 112%, #000 0%, rgba(0,0,0,.45) 42%, transparent 78%);
+              mask-image: radial-gradient(120% 95% at 55% 112%, #000 0%, rgba(0,0,0,.45) 42%, transparent 78%);
+    }
+    .sky::after {                           /* the dawn itself: slowly breathes brighter and climbs */
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(72% 52% at 55% 120%,
+        rgba(255,156,60,.40), rgba(255,116,38,.12) 42%, transparent 72%);
+      transform-origin: 55% 100%;
+      animation: dawn 14s ease-in-out infinite;
+    }
+    @keyframes dawn {
+      0%, 100% { opacity: .68; transform: translateY(0)    scale(1); }
+      50%      { opacity: 1;   transform: translateY(-3.5%) scale(1.10); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sky::after { animation: none; opacity: .85; }
+    }
+
+    main {
+      display: flex;
+      align-items: stretch;
+      max-width: 1260px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px 24px 12px;
+      gap: 0;
+    }
+
+    /* ── Splitters: quiet neutral hairlines. They mark the three columns
+         and nothing more — the accent is the left→right progression, not these. ── */
+    .col-divider {
+      width: 1px; margin: 0 36px; flex-shrink: 0;
+      background: linear-gradient(to bottom, transparent 0%, var(--rule) 14%, var(--rule) 86%, transparent 100%);
+    }
+
+    /* ═══ COL 1 — Identity ═══ */
+    .col-identity {
+      width: 210px; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .photo-wrap {
+      position: relative; width: 180px; height: 180px;
+      border-radius: 50%; overflow: hidden;
+      border: 2px solid var(--dust-dim); flex-shrink: 0;
+    }
+    .photo-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+
+    /* portrait + a 1985 postmark struck across its corner — an analog artifact of its era */
+    .portrait { position: relative; width: 180px; }
+    .postmark {
+      position: absolute; right: 2px; bottom: 0;
+      width: 94px; height: auto;
+      color: #d0b78c; opacity: .82;
+      transform: rotate(-11deg);
+      pointer-events: none;
+      filter: drop-shadow(0 1px 1px rgba(0,0,0,.5));
+    }
+
+    .identity-meta { margin-top: 20px; text-align: center; }
+    .identity-meta h1 {
+      font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 800;
+      letter-spacing: .02em; color: var(--text); line-height: 1.2;
+    }
+    .identity-meta .role {
+      font-size: 0.8rem; font-weight: 500; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--dust); margin-top: 10px;
+    }
+
+    /* ── Social links ── */
+    .social { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .social a {
+      display: flex; align-items: center; gap: 10px;
+      color: var(--dust); text-decoration: none; font-size: 0.8rem;
+      padding: 5px 10px; border-radius: 6px;
+      transition: color .3s ease, background .3s ease;
+    }
+    .social a:hover { color: var(--orange); background: rgba(255,106,0,.08); }
+    .social a i { font-size: 1rem; width: 18px; text-align: center; flex-shrink: 0; }
+    .social .link-label { font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ═══ COL 2 — Content ═══ */
+    .col-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+
+    .motto {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.35rem, 1.9vw, 1.8rem);
+      font-weight: 700; line-height: 1.42;
+    }
+    .motto .ln { white-space: nowrap; }
+    .motto .act { color: var(--orange); }            /* the action — orange, leading */
+    .motto .obj { color: #d4cfc7; }                  /* the object — readable bone */
+    .motto .leg { color: var(--dust); }              /* outdated / aged — legacy sepia */
+    .motto .val { color: var(--value); }             /* accumulated value — treasure gold */
+
+    /* Section label */
+    .section-label {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.68rem; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--orange); font-weight: 600; margin-bottom: 14px;
+      font-family: var(--mono);
+    }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--orange-dim); }
+
+    .about-text { font-size: 0.92rem; color: #b0aba4; line-height: 1.68; font-weight: 300; }
+    .about-text + .about-text { margin-top: 12px; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+    .about-text .av { color: var(--value); font-weight: 500; }   /* value = gold, consistent with the header */
+    .about-text .lg { color: var(--dust); }                       /* legacy = sepia, pairs with the orange value */
+
+    /* ═══ COL 3 — Contact (boot card) ═══ */
+    .col-qr {
+      width: 282px; flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: stretch;
+      justify-content: flex-start;
+    }
+
+    .qr-card {
+      border: 1px solid var(--gold-dim);
+      border-radius: 14px;
+      background: var(--surface);
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,.4),
+        0 18px 40px -22px rgba(0,0,0,.85);
+    }
+
+    /* title bar — echoes the editor tab on the front shirt */
+    .qr-tab {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px;
+      font-family: var(--mono); font-size: 0.72rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--gold-dim);
+      background: linear-gradient(180deg, rgba(255,178,77,.06), transparent);
+    }
+    .qr-tab .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .qr-tab .dot.o { background: var(--orange); }
+    .qr-tab .dot.b { background: var(--gold); }
+    .qr-tab .name { color: var(--text); margin-left: 2px; }
+    .qr-tab .badge {
+      margin-left: auto; font-size: 0.6rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold-dim);
+      padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* the lit screen the QR lives on */
+    .qr-screen { background: var(--screen); padding: 16px; }
+    .qr-screen img { width: 100%; height: auto; display: block; border-radius: 4px; }
+
+    /* terminal caption — echoes "SYSTEM STATUS: MERGED_" */
+    .qr-caption {
+      font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+      padding: 11px 14px 13px; border-top: 1px solid var(--gold-dim);
+      letter-spacing: .02em;
+    }
+    .qr-caption .prompt { color: var(--gold); margin-right: 6px; }
+    .qr-caption .cursor { color: var(--gold); animation: blink 1.1s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── AI assistant card — echoes the AI EDITOR on the back of the shirt ── */
+    .ai-card {
+      border: 1px solid var(--gold-dim); border-radius: 14px;
+      background: var(--surface); overflow: hidden; margin-bottom: 16px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 18px 40px -22px rgba(0,0,0,.85);
+    }
+    .ai-tab {
+      display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+      font-family: var(--mono); font-size: 0.72rem; color: var(--muted);
+      border-bottom: 1px solid var(--gold-dim);
+      background: linear-gradient(180deg, rgba(255,178,77,.06), transparent);
+    }
+    .ai-tab .glyph { color: var(--orange); font-weight: 700; letter-spacing: -.05em; }
+    .ai-tab .name { color: var(--text); }
+    .ai-tab .online { margin-left: auto; display: flex; align-items: center; gap: 6px; color: var(--green); font-size: 0.6rem; letter-spacing: .14em; text-transform: uppercase; }
+    .ai-tab .online .led { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .ai-body { padding: 12px 14px 12px; }
+    .ai-q { font-family: 'Inter', sans-serif; font-size: 0.8rem; color: #cfc9c1; line-height: 1.4; margin-bottom: 10px; }
+    .ai-suggest { list-style: none; display: flex; flex-direction: column; gap: 7px; margin-bottom: 11px; }
+    .ai-suggest li { font-family: 'Inter', sans-serif; font-size: 0.76rem; color: var(--dust); display: flex; gap: 8px; align-items: baseline; }
+    .ai-suggest .c { color: var(--orange); flex-shrink: 0; }
+    .ai-input {
+      font-family: var(--mono); font-size: 0.7rem; color: #cfc9c1;
+      display: flex; align-items: baseline; gap: 6px;
+      padding-top: 10px; border-top: 1px solid var(--rule);
+    }
+    .ai-input .p { color: var(--gold); }
+    .ai-input .cursor { color: var(--gold); animation: blink 1.1s steps(1) infinite; }
+    @media (prefers-reduced-motion: reduce) { .ai-input .cursor { animation: none; } }
+
+    /* ── Status bar footer — echoes the editor footer ── */
+    footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      padding: 12px 28px 16px;
+      font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+      border-top: 1px solid var(--gold-dim); letter-spacing: .04em;
+      background: linear-gradient(to top, rgba(0,0,0,.6), rgba(0,0,0,.18) 60%, transparent);
+    }
+    footer .status { display: flex; align-items: center; gap: 8px; color: var(--gold); }
+    footer .led {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 8px var(--green);
+    }
+    footer .meta { color: rgba(232,228,223,.4); }
+
+    /* ── Timeline: the 20-year arc, spanning all three columns ── */
+    .timeline {
+      position: relative; z-index: 1; margin-top: auto;
+      max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto;
+      padding: 0 24px 22px;
+    }
+    .tl-head { text-align: center; margin-bottom: 20px; }
+    .tl-title {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: clamp(1.2rem, 1.9vw, 1.55rem); color: var(--text);
+    }
+
+    .tl-track {
+      position: relative;
+      display: flex; align-items: flex-start; gap: 18px;
+    }
+    .tl-track::before {        /* the spine = the constant craft, brightening through the eras */
+      content: ''; position: absolute; left: 12.5%; right: 12.5%; top: 27px; height: 2px;
+      background: linear-gradient(to right,
+        var(--dust) 0%, #c8915a 42%, #e8843a 72%, var(--orange) 100%);
+    }
+    .tl-era { flex: 1 1 0; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+    .tl-node {
+      width: 54px; height: 54px; border-radius: 50%;
+      display: grid; place-items: center;
+      background: var(--bg); border: 1px solid currentColor;
+      position: relative; z-index: 1;
+    }
+    .tl-node svg { width: 27px; height: 27px; }
+    .tl-yr { font-family: var(--mono); font-size: 0.74rem; color: currentColor; }
+    .tl-name { font-weight: 600; font-size: 0.92rem; color: var(--text); }
+    .tl-det { font-size: 0.73rem; color: var(--muted); line-height: 1.55; max-width: 210px; }
+
+    .tl-era.e1 { color: var(--dust); }
+    .tl-era.e2 { color: #c8915a; }
+    .tl-era.e3 { color: #e8843a; }
+    .tl-era.e4 { color: var(--orange); }
+    .tl-era.e4 .tl-node { box-shadow: 0 0 20px -2px rgba(255,106,0,.5); }   /* the destination glows */
+
+    /* ── Responsive ── */
+    @media (max-width: 780px) {
+      main { flex-direction: column; align-items: center; padding: 32px 20px 24px; gap: 36px; }
+      .col-divider {
+        width: 100%; height: 1px; margin: 0;
+        background: linear-gradient(to right, transparent, var(--rule), transparent);
+      }
+      .col-identity { width: 100%; max-width: 320px; }
+      .col-qr { width: 100%; max-width: 340px; }
+      .social { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .social .link-label { display: none; }
+      .social a { padding: 10px; }
+      footer { justify-content: center; text-align: center; }
+      .tl-track { grid-template-columns: 1fr; gap: 30px; }
+      .tl-track::before {            /* vertical spine on mobile */
+        left: 50%; right: auto; top: 0; bottom: 0; width: 2px; height: auto;
+        background: linear-gradient(to bottom, var(--dust), #e8843a 75%, var(--orange));
+      }
+      .tl-det { max-width: 280px; }
+      .motto .ln { display: block; white-space: normal; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .qr-caption .cursor { animation: none; }
+    }
